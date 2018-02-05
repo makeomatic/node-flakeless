@@ -1,3 +1,6 @@
 module.exports = {
-  "extends": "google"
+  "extends": "makeomatic",
+  "rules": {
+    "no-bitwise": 0
+  }
 };

@@ -1,21 +1,19 @@
-'use strict';
-
-const assert = require('chai').assert;
+const { assert } = require('chai');
 const Flakeless = require('..');
 
-describe('Flakeless base64 output', function() {
-  it('is an object', function() {
+describe('Flakeless base64 output', () => {
+  it('is an object', () => {
     const flakeless = new Flakeless({
-      outputType: 'base64'
+      outputType: 'base64',
     });
 
     assert.equal(typeof flakeless, 'object');
     assert.instanceOf(flakeless, Flakeless);
   });
 
-  it('returns a string', function() {
+  it('returns a string', () => {
     const flakeless = new Flakeless({
-      outputType: 'base64'
+      outputType: 'base64',
     });
 
     const id = flakeless.next();
@@ -23,9 +21,9 @@ describe('Flakeless base64 output', function() {
     assert.typeOf(id, 'string');
   });
 
-  it('is 11 characters long', function() {
+  it('is 11 characters long', () => {
     const flakeless = new Flakeless({
-      outputType: 'base64'
+      outputType: 'base64',
     });
 
     const id = flakeless.next();
@@ -33,16 +31,16 @@ describe('Flakeless base64 output', function() {
     assert.lengthOf(id, 11);
   });
 
-  it('increases', function() {
+  it('increases', () => {
     // Define a Flakeless counter that outputs in base10.
     const flakeless = new Flakeless({
       epochStart: Date.now(),
-      outputType: 'base64'
+      outputType: 'base64',
     });
 
     // Generate a bunch of IDs.
     const ids = [];
-    for (let i = 0; i < 1000; ++i) {
+    for (let i = 0; i < 1000; i += 1) {
       ids.push(flakeless.next());
     }
 
@@ -52,31 +50,31 @@ describe('Flakeless base64 output', function() {
     assert.deepEqual(ids, sortedIds);
   });
 
-  it('is monotonic', function() {
+  it('is monotonic', () => {
     const flakeless = new Flakeless({
       epochStart: Date.now(),
-      outputType: 'base64'
+      outputType: 'base64',
     });
 
     // Generate a bunch of IDs.
     const ids = [];
-    for (let i = 0; i < 1000; ++i) {
+    for (let i = 0; i < 1000; i += 1) {
       ids.push(flakeless.next());
     }
 
     // Sort the IDs and remove duplicates.  If the output is monotonic, the
     //   length of the two array should be the same.
-    const sortedIds = ids.sort().reduce(function(prev, curr) {
+    const sortedIds = ids.sort().reduce((prev, curr) => {
       return (curr === prev[0]) ? prev : [curr].concat(prev);
     }, []);
     assert.lengthOf(sortedIds, 1000);
   });
 
-  it('has an encoded timestamp', function() {
+  it('has an encoded timestamp', () => {
     const flakeless = new Flakeless({
       epochStart: Date.now() - 1000,
       outputType: 'base64',
-      workerID: 0x3ff
+      workerID: 0x3ff,
     });
 
     const id = flakeless.next();
@@ -85,11 +83,11 @@ describe('Flakeless base64 output', function() {
     assert.notEqual(timePart, '--');
   });
 
-  it('has an encoded worker ID', function() {
+  it('has an encoded worker ID', () => {
     const flakeless = new Flakeless({
       epochStart: Date.now(),
       outputType: 'base64',
-      workerID: 34
+      workerID: 34,
     });
 
     const id = flakeless.next();
@@ -98,11 +96,11 @@ describe('Flakeless base64 output', function() {
     assert.oneOf(workerID, ['-X', 'FX', 'VX', 'kX']);
   });
 
-  it('has a properly sized workerID', function() {
+  it('has a properly sized workerID', () => {
     const flakeless = new Flakeless({
       epochStart: Date.now(),
       outputType: 'base64',
-      workerID: 0xffffffff
+      workerID: 0xffffffff,
     });
 
     const id = flakeless.next();
@@ -111,11 +109,11 @@ describe('Flakeless base64 output', function() {
     assert.oneOf(workerID, ['Ez', 'Uz', 'jz', 'zz']);
   });
 
-  it('has an encoded counter', function() {
+  it('has an encoded counter', () => {
     const flakeless = new Flakeless({
       epochStart: Date.now(),
       outputType: 'base64',
-      workerID: 0x3ff
+      workerID: 0x3ff,
     });
 
     const id = flakeless.next();

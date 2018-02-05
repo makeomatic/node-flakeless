@@ -10,9 +10,13 @@
     "id"
   ],
   "scripts": {
-    "pretest": "node_modules/.bin/eslint .",
-    "test": "./node_modules/.bin/mocha",
-    "install": "node-gyp rebuild"
+    "pretest": "yarn lint",
+    "lint": "eslint .",
+    "test": "mocha",
+    "install": "node-gyp rebuild",
+    "semantic-release": "semantic-release",
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "preparecommitmsg": "./node_modules/@makeomatic/deploy/git-hooks/prepare-commit-msg $GIT_PARAMS"
   },
   "repository": {
     "type": "git",
@@ -21,14 +25,18 @@
   "author": "Anthony Salani (https://github.com/asalani93)",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.3.0",
-    "eslint-config-google": "^0.6.0",
-    "jsdoc": "^3.4.0",
-    "mocha": "^3.0.2",
-    "node-gyp": "^3.4.0"
+    "@makeomatic/deploy": "^5.2.1",
+    "babel-eslint": "^8.2.1",
+    "chai": "^4.1.2",
+    "eslint": "^4.17.0",
+    "eslint-config-makeomatic": "^2.0.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "jsdoc": "^3.5.5",
+    "mocha": "^5.0.0",
+    "node-gyp": "^3.6.2"
   },
   "dependencies": {
-    "nan": "^2.4.0"
+    "nan": "^2.8.0"
   }
 }
