@@ -26,7 +26,7 @@ npm install -g node-gyp
 Once `node-gyp` is installed, install Flakeless.
 
 ```bash
-npm install flakeless
+npm install ms-flakeless
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ npm install flakeless
 ### Initialization:
 
 ```js
-const Flakeless = require('flakeless').Flakeless;
+const Flakeless = require('ms-flakeless');
 const flakeless = new Flakeless({
   epochStart: Date.now(),
   outputType: 'base64',
