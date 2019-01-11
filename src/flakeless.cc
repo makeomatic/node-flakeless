@@ -188,7 +188,7 @@ void Flakeless::Next(const Nan::FunctionCallbackInfo<v8::Value>& info) {
     const uint64_t base64Mask = 0x3f;
     char buff[12];
     for (int i = 10; i >= 0; --i) {
-      uint slice = finalBits & base64Mask;
+      uint32_t slice = finalBits & base64Mask;
       finalBits >>= 6;
       buff[i] = alpha64[slice];
     }
@@ -200,7 +200,7 @@ void Flakeless::Next(const Nan::FunctionCallbackInfo<v8::Value>& info) {
     const uint64_t base16Mask = 0xf;
     char buff[17];
     for (int i = 15; i >= 0; --i) {
-      uint slice = finalBits & base16Mask;
+      uint32_t slice = finalBits & base16Mask;
       finalBits >>= 4;
       buff[i] = alpha16[slice];
     }
