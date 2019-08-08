@@ -86,13 +86,14 @@ void Flakeless::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
       auto vEpochStart = opts->Get(Nan::New("epochStart").ToLocalChecked());
       auto vWorkerID = opts->Get(Nan::New("workerID").ToLocalChecked());
       auto vOutputType = opts->Get(Nan::New("outputType").ToLocalChecked());
+      auto context = Nan::GetCurrentContext();
 
       // Provide defaults for the parameters not given.
-      double epochStart = vEpochStart->IsNumber() ? vEpochStart->NumberValue() : 0.f;
-      double workerID = vWorkerID->IsNumber() ? vWorkerID->NumberValue() : 0.f;
+      double epochStart = vEpochStart->IsNumber() ? vEpochStart->NumberValue(context).FromJust() : 0.f;
+      double workerID = vWorkerID->IsNumber() ? vWorkerID->NumberValue(context).FromJust() : 0.f;
       FlakelessOutput outputType = FlakelessOutput::Base64;
       if (vOutputType->IsString()) {
-        std::string s(*v8::String::Utf8Value(vOutputType->ToString()));
+        std::string s(*Nan::Utf8String(vOutputType));
         if (s == "base10") {
           outputType = FlakelessOutput::Base10;
         } else if (s == "base16") {

@@ -25,18 +25,24 @@
   "author": "Anthony Salani (https://github.com/asalani93)",
   "license": "MIT",
   "devDependencies": {
-    "@makeomatic/deploy": "^5.2.1",
-    "babel-eslint": "^8.2.1",
-    "chai": "^4.1.2",
-    "eslint": "^4.17.0",
-    "eslint-config-makeomatic": "^2.0.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-promise": "^3.6.0",
-    "jsdoc": "^3.5.5",
-    "mocha": "^5.0.0",
-    "node-gyp": "^3.6.2"
+    "@makeomatic/deploy": "^8.4.5",
+    "babel-eslint": "^10.0.2",
+    "chai": "^4.2.0",
+    "eslint": "^6.1.0",
+    "eslint-config-makeomatic": "^3.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "jsdoc": "^3.6.3",
+    "mocha": "^6.2.0",
+    "node-gyp": "^5.0.3"
   },
   "dependencies": {
-    "nan": "^2.8.0"
+    "nan": "^2.14.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS",
+      "prepare-commit-msg": "./node_modules/@makeomatic/deploy/git-hooks/prepare-commit-msg $HUSKY_GIT_PARAMS"
+    }
   }
 }
