@@ -6,6 +6,11 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 using std::chrono::system_clock;
 
+using Nan::Get;
+using Nan::GetFunction;
+using v8::Local;
+using v8::MaybeLocal;
+
 Nan::Persistent<v8::Function> Flakeless::constructor;
 
 // The alphabet to use for hexadecimal encoding.
@@ -55,19 +60,19 @@ Flakeless::~Flakeless() {
 
 }
 
-void Flakeless::Init(v8::Local<v8::Object> exports) {
+void Flakeless::Init(Local<v8::Object> exports) {
   Nan::HandleScope scope;
 
   // Prepare constructor template
-  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
+  Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
   tpl->SetClassName(Nan::New("Flakeless").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
   // Prototype
   Nan::SetPrototypeMethod(tpl, "next", Next);
 
-  constructor.Reset(tpl->GetFunction());
-  exports->Set(Nan::New("Flakeless").ToLocalChecked(), tpl->GetFunction());
+  constructor.Reset(Nan::GetFunction(tpl).ToLocalChecked());
+  Nan::Set(exports, Nan::New("Flakeless").ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
 }
 
 void Flakeless::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
@@ -80,29 +85,32 @@ void Flakeless::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
       //   provided arguments and fill in missing ones with defaults.
 
       // Store the object as an object and not a vague local.
-      v8::Local<v8::Object> opts = info[0].As<v8::Object>();
+      Local<v8::Object> opts = info[0].As<v8::Object>();
+
+      auto maybeOutputType = Nan::To<v8::String>(Nan::Get(opts, Nan::New("outputType").ToLocalChecked()).FromMaybe(Local<v8::Value>()));
+      auto maybeEpochStart = Nan::To<v8::Number>(Nan::Get(opts, Nan::New("epochStart").ToLocalChecked()).FromMaybe(Local<v8::Value>()));
+      auto maybeWorkerID = Nan::To<v8::Number>(Nan::Get(opts, Nan::New("workerID").ToLocalChecked()).FromMaybe(Local<v8::Value>()));
 
       // Unpack all of the required arguments from the parameters arguments
-      auto vEpochStart = opts->Get(Nan::New("epochStart").ToLocalChecked());
-      auto vWorkerID = opts->Get(Nan::New("workerID").ToLocalChecked());
-      auto vOutputType = opts->Get(Nan::New("outputType").ToLocalChecked());
+      auto vEpochStart = maybeEpochStart.FromMaybe(Nan::New(0.f));
+      auto vWorkerID = maybeWorkerID.FromMaybe(Nan::New(0.f));
+      auto vOutputType = maybeOutputType.FromMaybe(Nan::New("base64").ToLocalChecked());
       auto context = Nan::GetCurrentContext();
 
       // Provide defaults for the parameters not given.
-      double epochStart = vEpochStart->IsNumber() ? vEpochStart->NumberValue(context).FromJust() : 0.f;
-      double workerID = vWorkerID->IsNumber() ? vWorkerID->NumberValue(context).FromJust() : 0.f;
+      double epochStart = vEpochStart->NumberValue(context).FromJust();
+      double workerID = vWorkerID->NumberValue(context).FromJust();
       FlakelessOutput outputType = FlakelessOutput::Base64;
-      if (vOutputType->IsString()) {
-        std::string s(*Nan::Utf8String(vOutputType));
-        if (s == "base10") {
-          outputType = FlakelessOutput::Base10;
-        } else if (s == "base16") {
-          outputType = FlakelessOutput::Base16;
-        } else if (s == "base64") {
-          outputType = FlakelessOutput::Base64;
-        } else {
-          Nan::ThrowError("Invalid value for outputType");
-        }
+      
+      std::string s(*Nan::Utf8String(vOutputType));
+      if (s == "base10") {
+        outputType = FlakelessOutput::Base10;
+      } else if (s == "base16") {
+        outputType = FlakelessOutput::Base16;
+      } else if (s == "base64") {
+        outputType = FlakelessOutput::Base64;
+      } else {
+        Nan::ThrowError("Invalid value for outputType");
       }
 
       // Construct the actual object
@@ -123,10 +131,10 @@ void Flakeless::New(const Nan::FunctionCallbackInfo<v8::Value>& info) {
   } else {
     // Invoked as plain function `MyObject(...)`, turn into construct call.
     // const int argc = 1;
-    // v8::Local<v8::Value> argv[argc] = { info[0] };
+    // Local<v8::Value> argv[argc] = { info[0] };
     const int argc = 1;
-    v8::Local<v8::Value> argv[argc] = { info[0] };
-    v8::Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
+    Local<v8::Value> argv[argc] = { info[0] };
+    Local<v8::Function> cons = Nan::New<v8::Function>(constructor);
     info.GetReturnValue().Set(Nan::NewInstance(cons, argc, argv).ToLocalChecked());
   }
 }
