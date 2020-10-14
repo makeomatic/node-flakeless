@@ -1,8 +1,8 @@
 #include <nan.h>
 #include "flakeless.h"
 
-void InitAll(v8::Local<v8::Object> exports) {
-  Flakeless::Init(exports);
+NAN_MODULE_INIT(InitAll) {
+  Flakeless::Init(target);
 }
 
 NODE_MODULE(flakeless, InitAll)
