@@ -1,9 +1,9 @@
 module.exports = {
-  "extends": "makeomatic",
-  "env": {
-    "mocha": true
+  extends: 'makeomatic',
+  env: {
+    mocha: true,
   },
-  "rules": {
-    "no-bitwise": 0
-  }
+  rules: {
+    'no-bitwise': 0,
+  },
 };

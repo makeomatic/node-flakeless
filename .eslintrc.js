@@ -1,6 +1,6 @@
 module.exports = {
-  "extends": "makeomatic",
-  "rules": {
-    "no-bitwise": 0
-  }
+  extends: 'makeomatic',
+  rules: {
+    'no-bitwise': 0,
+  },
 };

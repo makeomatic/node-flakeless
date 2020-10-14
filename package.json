@@ -23,20 +23,20 @@
   "author": "Anthony Salani (https://github.com/asalani93)",
   "license": "MIT",
   "devDependencies": {
-    "@makeomatic/deploy": "^9.3.2",
-    "babel-eslint": "^10.0.3",
+    "@makeomatic/deploy": "^10.3.1",
+    "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
-    "eslint": "^6.6.0",
-    "eslint-config-makeomatic": "^4.0.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint": "^7.11.0",
+    "eslint-config-makeomatic": "^5.0.3",
+    "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-unicorn": "^12.1.0",
-    "jsdoc": "^3.6.3",
-    "mocha": "^6.2.2",
-    "node-gyp": "^6.0.0"
+    "eslint-plugin-unicorn": "^22.0.0",
+    "jsdoc": "^3.6.6",
+    "mocha": "^8.1.3",
+    "node-gyp": "^7.1.0"
   },
   "dependencies": {
-    "nan": "^2.14.0"
+    "nan": "^2.14.2"
   },
   "husky": {
     "hooks": {
